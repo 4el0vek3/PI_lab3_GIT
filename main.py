@@ -8,6 +8,8 @@ color_car = []
 price_car = []
 fari_car = []
 door_car = []
+power_car = []
+
 marc = ""
 model = ""
 year = ""
@@ -15,6 +17,8 @@ color = "1"
 price = ""
 fari = ""
 door = ""
+power = ""
+
 carina = open('carina.txt', 'r')
 j = carina.readline()
 file = j.split('&')
@@ -27,6 +31,7 @@ if j != "":
         price_car = [file[4]]
         fari_car = [file[5]]
         door_car = [file[6]]
+        power_car = [file[7]]
     else:
         marc_car = file[0].split(' ; ')
         model_car = file[1].split(' ; ')
@@ -35,10 +40,11 @@ if j != "":
         price_car = file[4].split(' ; ')
         fari_car = file[5].split(' ; ')
         door_car = file[6].split(' ; ')
+        power_car = file[7].split(' ; ')
 vegitables = []
 for i in range(len(marc_car)):
     veg = [(marc_car[i]), (model_car[i]), (year_of_release[i]), (color_car[i]), (price_car[i]), (fari_car[i]),
-           (door_car[i])]
+           (door_car[i]), (power_car[i])]
     vegitables.append(veg)
 
 
@@ -55,6 +61,8 @@ def add():
                 color_car.pop(-1)
             if len(price_car) > ib:
                 price_car.pop(-1)
+            if len(power_car) > ib:
+                power_car.pop(-1)
         add_open.grab_release()
         add_open.destroy()
 
@@ -75,10 +83,12 @@ def add():
                     fari_car.pop(-1)
                 if len(door_car) > ib:
                     door.car.pop(-1)
+                if len(power_car) > ib:
+                    power_car.pop(-1)
             else:
                 idd = len(marc_car)
                 fj = [(marc_car[idd - 1], model_car[idd - 1], year_of_release[idd - 1], color_car[idd - 1],
-                       price_car[idd - 1], fari_car[idd - 1], door_car[idd - 1])]
+                       price_car[idd - 1], fari_car[idd - 1], door_car[idd - 1], power_car[idd - 1])]
                 for component in fj:
                     text1.insert('', END, idd, values=component)
                 carina = open('carina.txt', 'w')
@@ -89,7 +99,8 @@ def add():
                     color_car_save = ' ; '.join(color_car) + '&'
                     price_car_save = ' ; '.join(price_car) + '&'
                     fari_car_save = ' ; '.join(fari_car) + "&"
-                    door_car_save = ' ; '.join(door_car)
+                    door_car_save = ' ; '.join(door_car) + "&"
+                    power_car_save = ' ; '.join(power_car)
                 else:
                     marc_car_save = ''.join(marc_car) + '&'
                     model_car_save = ''.join(model_car) + '&'
@@ -97,7 +108,8 @@ def add():
                     color_car_save = ''.join(color_car) + '&'
                     price_car_save = ''.join(price_car) + '&'
                     fari_car_save = ''.join(fari_car) + "&"
-                    door_car_save = ''.join(door_car)
+                    door_car_save = ''.join(door_car) + "&"
+                    power_car_save = ''.join(power_car)
 
                 carina.writelines(marc_car_save)
                 carina.writelines(model_car_save)
@@ -106,6 +118,7 @@ def add():
                 carina.writelines(price_car_save)
                 carina.writelines(fari_car_save)
                 carina.writelines(door_car_save)
+                carina.writelines(power_car_save)
                 carina.close()
                 far_and_door.grab_release()
                 far_and_door.destroy()
@@ -212,6 +225,8 @@ def add():
         try:
             year = inputing.get()
             a = int(year)
+            if a < 1885 or a > 2024:
+                raise ValueError
             year_of_release.append(year)
             add_open.title("Цвет")
             add_open.geometry("300x300")
@@ -276,16 +291,33 @@ def add():
         except:
             label_add["foreground"] = "#B71C1C"
 
+
+    def powergo():
+        try:
+            label_add["foreground"] = "#000000"
+            power = inputing.get()
+            a = int(power)
+            if a < 1 or a > 2000:
+                raise ValueError
+            power_car.append(power)
+            add_open.title("Год")
+            label_add["text"] = "Введите год"
+            inputing.delete(0, END)
+            button_add["command"] = yeargo
+        except:
+            label_add["foreground"] = "#B71C1C"
     def pricego():
         try:
             label_add["foreground"] = "#000000"
             price = inputing.get()
             a = int(price)
+            if a < 1:
+                raise ValueError
             price_car.append(price)
-            add_open.title("Год")
-            label_add["text"] = "Введите год"
+            add_open.title("Мощность")
+            label_add["text"] = "Введите мощность"
             inputing.delete(0, END)
-            button_add["command"] = yeargo
+            button_add["command"] = powergo
         except:
             label_add["foreground"] = "#B71C1C"
 
@@ -338,6 +370,7 @@ def delite():
         price_car.pop(po - 1)
         fari_car.pop(po - 1)
         door_car.pop(po - 1)
+        power_car.pop(po - 1)
         colel = len(marc_car)
 
         for i in range(po, colel + 2):
@@ -345,7 +378,7 @@ def delite():
 
         for i in range(po - 1, len(marc_car)):
             veg = [(marc_car[i]), (model_car[i]), (year_of_release[i]), (color_car[i]), (price_car[i]), (fari_car[i]),
-                   (door_car[i])]
+                   (door_car[i]), (power_car[i])]
             variant.append(veg)
 
         for component1 in variant:
@@ -360,7 +393,8 @@ def delite():
             color_car_save = ' ; '.join(color_car) + '&'
             price_car_save = ' ; '.join(price_car) + "&"
             fari_car_save = ' ; '.join(fari_car) + "&"
-            door_car_save = ' ; '.join(door_car)
+            door_car_save = ' ; '.join(door_car) + "&"
+            power_car_save = ' ; '.join(power_car)
 
             carina.writelines(marc_car_save)
             carina.writelines(model_car_save)
@@ -369,6 +403,7 @@ def delite():
             carina.writelines(price_car_save)
             carina.writelines(fari_car_save)
             carina.writelines(door_car_save)
+            carina.writelines(power_car_save)
 
         label["text"] = ""
         if len(marc_car) >= po:
@@ -400,7 +435,7 @@ def find():
                 you = 0
                 for i in range(len(marc_car)):
                     fj = [(marc_car[i]), (model_car[i]), (year_of_release[i]), (color_car[i]), (price_car[i]),
-                          (fari_car[i]), (door_car[i])]
+                          (fari_car[i]), (door_car[i]), (power_car[i])]
                     mas.append(fj)
                 for component in mas:
                     you += 1
@@ -417,6 +452,7 @@ def find():
             price_car2 = []
             fari_car2 = []
             door_car2 = []
+            power_car2 = []
             if poisk == '':
                 for i in range(1, len(marc_car) + 1):
                     text1.delete(i)
@@ -439,9 +475,10 @@ def find():
                         price_car2.append(price_car[i2 - 1])
                         fari_car2.append(fari_car[i2 - 1])
                         door_car2.append(door_car[i2 - 1])
+                        power_car2.append(power_car[i2 - 1])
                         idd = len(marc_car2)
                         fj = [(marc_car2[idd - 1], model_car2[idd - 1], year_car2[idd - 1], color_car2[idd - 1],
-                               price_car2[idd - 1], fari_car2[idd - 1], door_car2[idd - 1])]
+                               price_car2[idd - 1], fari_car2[idd - 1], door_car2[idd - 1], power_car2[idd - 1])]
                         for component in fj:
                             text1.insert('', END, idd, values=component)
                         bat4['command'] = otmenapoiska
@@ -460,6 +497,7 @@ def find():
         bat25.pack_forget()
         bat26.pack_forget()
         bat27.pack_forget()
+        bat28.pack_forget()
         label_find = Label(find_open, text="Поиск по марки")
         inputing2 = Entry(find_open, width=40)
         bat21 = Button(find_open, width=14, height=2, text='Найти')
@@ -501,6 +539,7 @@ def find():
             price_car2 = []
             fari_car2 = []
             door_car2 = []
+            power_car2 = []
             i3 = 0
             if poisk == '':
                 for i in range(1, len(marc_car) + 1):
@@ -524,9 +563,10 @@ def find():
                         price_car2.append(price_car[i3 - 1])
                         fari_car2.append(fari_car[i3 - 1])
                         door_car2.append(door_car[i3 - 1])
+                        power_car2.append(power_car[i3 - 1])
                         idd = len(marc_car2)
                         fj = [(marc_car2[idd - 1], model_car2[idd - 1], year_car2[idd - 1], color_car2[idd - 1],
-                               price_car2[idd - 1], fari_car2[idd - 1], door_car2[idd - 1])]
+                               price_car2[idd - 1], fari_car2[idd - 1], door_car2[idd - 1], power_car2[idd - 1])]
                         for component in fj:
                             text1.insert('', END, idd, values=component)
                         bat4['command'] = otmenapoiska
@@ -545,6 +585,7 @@ def find():
         bat25.pack_forget()
         bat26.pack_forget()
         bat27.pack_forget()
+        bat28.pack_forget()
         label_find = Label(find_open, text="Поиск по модели")
         label_find["foreground"] = "#000000"
         inputing = Entry(find_open, width=40)
@@ -571,7 +612,7 @@ def find():
                 you = 0
                 for i in range(len(marc_car)):
                     fj = [(marc_car[i]), (model_car[i]), (year_of_release[i]), (color_car[i]), (price_car[i]),
-                          (fari_car[i]), (door_car[i])]
+                          (fari_car[i]), (door_car[i]), (power_car[i])]
                     mas.append(fj)
                 for component in mas:
                     you += 1
@@ -588,6 +629,7 @@ def find():
             price_car2 = []
             fari_car2 = []
             door_car2 = []
+            power_car2 = []
             if poisk == '':
                 for i in range(1, len(marc_car) + 1):
                     text1.delete(i)
@@ -610,9 +652,10 @@ def find():
                         price_car2.append(price_car[i5 - 1])
                         fari_car2.append(fari_car[i5 - 1])
                         door_car2.append(door_car[i5 - 1])
+                        power_car2.append(power_car[i5 - 1])
                         idd = len(marc_car2)
                         fj = [(marc_car2[idd - 1], model_car2[idd - 1], year_car2[idd - 1], color_car2[idd - 1],
-                               price_car2[idd - 1], fari_car2[idd - 1], door_car2[idd - 1])]
+                               price_car2[idd - 1], fari_car2[idd - 1], door_car2[idd - 1], power_car2[idd - 1])]
                         for component in fj:
                             text1.insert('', END, idd, values=component)
                         bat4['command'] = otmenapoiska
@@ -631,6 +674,7 @@ def find():
         bat25.pack_forget()
         bat26.pack_forget()
         bat27.pack_forget()
+        bat28.pack_forget()
         label_find = Label(find_open, text="Поиск году")
         label_find["foreground"] = "#000000"
         inputing = Entry(find_open, width=40)
@@ -657,7 +701,7 @@ def find():
                 you = 0
                 for i in range(len(marc_car)):
                     fj = [(marc_car[i]), (model_car[i]), (year_of_release[i]), (color_car[i]), (price_car[i]),
-                          (fari_car[i]), (door_car[i])]
+                          (fari_car[i]), (door_car[i]), (power_car[i])]
                     mas.append(fj)
                 for component in mas:
                     you += 1
@@ -674,6 +718,7 @@ def find():
             price_car2 = []
             fari_car2 = []
             door_car2 = []
+            power_car2 = []
             if poisk == '':
                 for i in range(1, len(marc_car) + 1):
                     text1.delete(i)
@@ -696,9 +741,10 @@ def find():
                         price_car2.append(price_car[i4 - 1])
                         fari_car2.append(fari_car[i4 - 1])
                         door_car2.append(door_car[i4 - 1])
+                        power_car2.append(door_car[i4 - 1])
                         idd = len(marc_car2)
                         fj = [(marc_car2[idd - 1], model_car2[idd - 1], year_car2[idd - 1], color_car2[idd - 1],
-                               price_car2[idd - 1], fari_car2[idd - 1], door_car2[idd - 1])]
+                               price_car2[idd - 1], fari_car2[idd - 1], door_car2[idd - 1], power_car2[idd - 1])]
                         for component in fj:
                             text1.insert('', END, idd, values=component)
                         bat4['command'] = otmenapoiska
@@ -717,6 +763,7 @@ def find():
         bat25.pack_forget()
         bat26.pack_forget()
         bat27.pack_forget()
+        bat28.pack_forget()
         label_find = Label(find_open, text="Поиск по цвету")
         label_find["foreground"] = "#000000"
         inputing = Entry(find_open, width=40)
@@ -743,7 +790,7 @@ def find():
                 you = 0
                 for i in range(len(marc_car)):
                     fj = [(marc_car[i]), (model_car[i]), (year_of_release[i]), (color_car[i]), (price_car[i]),
-                          (fari_car[i]), (door_car[i])]
+                          (fari_car[i]), (door_car[i]), (power_car[i])]
                     mas.append(fj)
                 for component in mas:
                     you += 1
@@ -760,6 +807,7 @@ def find():
             price_car2 = []
             fari_car2 = []
             door_car2 = []
+            power_car2 = []
             if poisk == '':
                 for i in range(1, len(marc_car) + 1):
                     text1.delete(i)
@@ -778,9 +826,10 @@ def find():
                         price_car2.append(price_car[i4 - 1])
                         fari_car2.append(fari_car[i4 - 1])
                         door_car2.append(door_car[i4 - 1])
+                        power_car2.append(door_car[i4 - 1])
                         idd = len(marc_car2)
                         fj = [(marc_car2[idd - 1], model_car2[idd - 1], year_car2[idd - 1], color_car2[idd - 1],
-                               price_car2[idd - 1], fari_car2[idd - 1], door_car2[idd - 1])]
+                               price_car2[idd - 1], fari_car2[idd - 1], door_car2[idd - 1], power_car2[idd - 1])]
                         for component in fj:
                             text1.insert('', END, idd, values=component)
                         bat4['command'] = otmenapoiska
@@ -799,6 +848,7 @@ def find():
         bat25.pack_forget()
         bat26.pack_forget()
         bat27.pack_forget()
+        bat28.pack_forget()
         label_find = Label(find_open, text="Поиск по цене")
         label_find["foreground"] = "#000000"
         inputing = Entry(find_open, width=40)
@@ -806,6 +856,91 @@ def find():
         label_find.pack(side=TOP, pady=5)
         inputing.pack(side=TOP, pady=5)
         bat21['command'] = price
+        bat21.pack(side=TOP, pady=5)
+        find_open.geometry("400x200")
+        label.pack()
+
+    def ppower():
+        def power():
+            def otmenapoiska():
+                bat4.pack_forget()
+                bat1.pack(side=LEFT, padx=5)
+                bat2.pack(side=LEFT, padx=5)
+                bat3.pack(side=LEFT, padx=5)
+                bat4.pack(side=LEFT, padx=5)
+                bat4['text'] = 'Поиск'
+                for i7 in range(1, len(marc_car2) + 1):
+                    text1.delete(i7)
+                mas = []
+                you = 0
+                for i in range(len(marc_car)):
+                    fj = [(marc_car[i]), (model_car[i]), (year_of_release[i]), (color_car[i]), (price_car[i]),
+                          (fari_car[i]), (door_car[i]), (power_car[i])]
+                    mas.append(fj)
+                for component in mas:
+                    you += 1
+                    text1.insert('', END, you, values=component)
+                bat4['command'] = find
+
+            poisk = inputing.get()
+            DP = len(poisk)
+            i4 = 0
+            marc_car2 = []
+            model_car2 = []
+            year_car2 = []
+            color_car2 = []
+            price_car2 = []
+            fari_car2 = []
+            door_car2 = []
+            power_car2 = []
+            if poisk == '':
+                for i in range(1, len(marc_car) + 1):
+                    text1.delete(i)
+                bat4['command'] = otmenapoiska
+                find_open.destroy()
+            else:
+                for i in range(1, len(marc_car) + 1):
+                    text1.delete(i)
+                for pmar in power_car:
+                    i4 += 1
+                    if poisk == pmar[0:DP]:
+                        marc_car2.append(marc_car[i4 - 1])
+                        model_car2.append(model_car[i4 - 1])
+                        year_car2.append(year_of_release[i4 - 1])
+                        color_car2.append(color_car[i4 - 1])
+                        price_car2.append(price_car[i4 - 1])
+                        fari_car2.append(fari_car[i4 - 1])
+                        door_car2.append(door_car[i4 - 1])
+                        power_car2.append(power_car[i4 - 1])
+                        idd = len(marc_car2)
+                        fj = [(marc_car2[idd - 1], model_car2[idd - 1], year_car2[idd - 1], color_car2[idd - 1],
+                               price_car2[idd - 1], fari_car2[idd - 1], door_car2[idd - 1], power_car2[idd - 1])]
+                        for component in fj:
+                            text1.insert('', END, idd, values=component)
+                        bat4['command'] = otmenapoiska
+                    else:
+                        bat4['command'] = otmenapoiska
+                    find_open.destroy()
+            bat1.pack_forget()
+            bat2.pack_forget()
+            bat3.pack_forget()
+            bat4['text'] = 'Отмена поиска'
+
+        bat20.pack_forget()
+        bat22.pack_forget()
+        bat23.pack_forget()
+        bat24.pack_forget()
+        bat25.pack_forget()
+        bat26.pack_forget()
+        bat27.pack_forget()
+        bat28.pack_forget()
+        label_find = Label(find_open, text="Поиск по мощности")
+        label_find["foreground"] = "#000000"
+        inputing = Entry(find_open, width=40)
+        bat21 = Button(find_open, width=14, height=2, text='Найти')
+        label_find.pack(side=TOP, pady=5)
+        inputing.pack(side=TOP, pady=5)
+        bat21['command'] = power
         bat21.pack(side=TOP, pady=5)
         find_open.geometry("400x200")
         label.pack()
@@ -825,7 +960,7 @@ def find():
                 you = 0
                 for i in range(len(marc_car)):
                     fj = [(marc_car[i]), (model_car[i]), (year_of_release[i]), (color_car[i]), (price_car[i]),
-                          (fari_car[i]), (door_car[i])]
+                          (fari_car[i]), (door_car[i]), (power_car[i])]
                     mas.append(fj)
                 for component in mas:
                     you += 1
@@ -840,6 +975,7 @@ def find():
             price_car2 = []
             fari_car2 = []
             door_car2 = []
+            power_car2 = []
             for i in range(1, len(marc_car) + 1):
                 text1.delete(i)
             for pmar in fari_car:
@@ -852,9 +988,10 @@ def find():
                     price_car2.append(price_car[i4 - 1])
                     fari_car2.append(fari_car[i4 - 1])
                     door_car2.append(door_car[i4 - 1])
+                    power_car2.append(power_car[i4 - 1])
                     idd = len(marc_car2)
                     fj = [(marc_car2[idd - 1], model_car2[idd - 1], year_car2[idd - 1], color_car2[idd - 1],
-                           price_car2[idd - 1], fari_car2[idd - 1], door_car2[idd - 1])]
+                           price_car2[idd - 1], fari_car2[idd - 1], door_car2[idd - 1], power_car2[idd - 1])]
                     for component in fj:
                         text1.insert('', END, idd, values=component)
                     bat4['command'] = otmenapoiska
@@ -881,7 +1018,7 @@ def find():
                 you = 0
                 for i in range(len(marc_car)):
                     fj = [(marc_car[i]), (model_car[i]), (year_of_release[i]), (color_car[i]), (price_car[i]),
-                          (fari_car[i]), (door_car[i])]
+                          (fari_car[i]), (door_car[i]), (power_car[i])]
                     mas.append(fj)
                 for component in mas:
                     you += 1
@@ -896,6 +1033,7 @@ def find():
             price_car2 = []
             fari_car2 = []
             door_car2 = []
+            power_car2 = []
             for i in range(1, len(marc_car) + 1):
                 text1.delete(i)
             for pmar in fari_car:
@@ -908,9 +1046,10 @@ def find():
                     price_car2.append(price_car[i4 - 1])
                     fari_car2.append(fari_car[i4 - 1])
                     door_car2.append(door_car[i4 - 1])
+                    power_car2.append(power_car[i4 - 1])
                     idd = len(marc_car2)
                     fj = [(marc_car2[idd - 1], model_car2[idd - 1], year_car2[idd - 1], color_car2[idd - 1],
-                           price_car2[idd - 1], fari_car2[idd - 1], door_car2[idd - 1])]
+                           price_car2[idd - 1], fari_car2[idd - 1], door_car2[idd - 1], power_car2[idd - 1])]
                     for component in fj:
                         text1.insert('', END, idd, values=component)
                     bat4['command'] = otmenapoiska
@@ -930,6 +1069,7 @@ def find():
         bat25.pack_forget()
         bat26.pack_forget()
         bat27.pack_forget()
+        bat28.pack_forget()
         label_find = Label(find_open, text="Поиск по состоянию фар")
         bat30 = Button(find_open, width=14, height=2, text='Выключены')
         bat31 = Button(find_open, width=14, height=2, text='Включены')
@@ -960,7 +1100,7 @@ def find():
                 you = 0
                 for i in range(len(marc_car)):
                     fj = [(marc_car[i]), (model_car[i]), (year_of_release[i]), (color_car[i]), (price_car[i]),
-                          (fari_car[i]), (door_car[i])]
+                          (fari_car[i]), (door_car[i]), (power_car[i])]
                     mas.append(fj)
                 for component in mas:
                     you += 1
@@ -975,6 +1115,7 @@ def find():
             price_car2 = []
             fari_car2 = []
             door_car2 = []
+            power_car2 = []
             for i in range(1, len(marc_car) + 1):
                 text1.delete(i)
             for pmar in door_car:
@@ -987,9 +1128,10 @@ def find():
                     price_car2.append(price_car[i4 - 1])
                     fari_car2.append(fari_car[i4 - 1])
                     door_car2.append(door_car[i4 - 1])
+                    power_car2.append(power_car[i4 - 1])
                     idd = len(marc_car2)
                     fj = [(marc_car2[idd - 1], model_car2[idd - 1], year_car2[idd - 1], color_car2[idd - 1],
-                           price_car2[idd - 1], fari_car2[idd - 1], door_car2[idd - 1])]
+                           price_car2[idd - 1], fari_car2[idd - 1], door_car2[idd - 1], power_car2[idd - 1])]
                     for component in fj:
                         text1.insert('', END, idd, values=component)
                     bat4['command'] = otmenapoiska
@@ -1016,7 +1158,7 @@ def find():
                 you = 0
                 for i in range(len(marc_car)):
                     fj = [(marc_car[i]), (model_car[i]), (year_of_release[i]), (color_car[i]), (price_car[i]),
-                          (fari_car[i]), (door_car[i])]
+                          (fari_car[i]), (door_car[i]), (power_car[i])]
                     mas.append(fj)
                 for component in mas:
                     you += 1
@@ -1031,6 +1173,7 @@ def find():
             price_car2 = []
             fari_car2 = []
             door_car2 = []
+            power_car2 = []
             for i in range(1, len(marc_car) + 1):
                 text1.delete(i)
             for pmar in door_car:
@@ -1043,9 +1186,10 @@ def find():
                     price_car2.append(price_car[i4 - 1])
                     fari_car2.append(fari_car[i4 - 1])
                     door_car2.append(door_car[i4 - 1])
+                    power_car2.append(power_car[i4 - 1])
                     idd = len(marc_car2)
                     fj = [(marc_car2[idd - 1], model_car2[idd - 1], year_car2[idd - 1], color_car2[idd - 1],
-                           price_car2[idd - 1], fari_car2[idd - 1], door_car2[idd - 1])]
+                           price_car2[idd - 1], fari_car2[idd - 1], door_car2[idd - 1], power_car2[idd - 1])]
                     for component in fj:
                         text1.insert('', END, idd, values=component)
                     bat4['command'] = otmenapoiska
@@ -1065,6 +1209,7 @@ def find():
         bat25.pack_forget()
         bat26.pack_forget()
         bat27.pack_forget()
+        bat28.pack_forget()
         label_find = Label(find_open, text="Поиск по состоянию фар")
         bat30 = Button(find_open, width=14, height=2, text='Закрыты')
         bat31 = Button(find_open, width=14, height=2, text='Открыты')
@@ -1082,7 +1227,7 @@ def find():
 
     find_open = Toplevel()
     find_open.title("Поиск")
-    find_open.geometry("1050x100")
+    find_open.geometry("1150x100")
     find_open.protocol("WM_DELETE_WINDOW", lambda: dismis(find_open))
     bat20 = Button(find_open, width=14, height=2, text='По марке')
     bat22 = Button(find_open, width=14, height=2, text='По модели')
@@ -1091,6 +1236,8 @@ def find():
     bat25 = Button(find_open, width=14, height=2, text='По цене')
     bat26 = Button(find_open, width=22, height=2, text='По состоянию фар')
     bat27 = Button(find_open, width=22, height=2, text='По состоянию дверей')
+    bat28 = Button(find_open, width=22, height=2, text='По мощности')
+
     bat20["command"] = pmarc
     bat22["command"] = pmod
     bat23["command"] = pyear
@@ -1098,6 +1245,8 @@ def find():
     bat25["command"] = pprice
     bat26["command"] = pfari
     bat27["command"] = pdoor
+    bat28["command"] = ppower
+
     bat20.pack(side=LEFT, padx=10)
     bat22.pack(side=LEFT, padx=10)
     bat23.pack(side=LEFT, padx=10)
@@ -1105,6 +1254,7 @@ def find():
     bat25.pack(side=LEFT, padx=10)
     bat26.pack(side=LEFT, padx=10)
     bat27.pack(side=LEFT, padx=10)
+    bat28.pack(side=LEFT, padx=10)
     find_open.grab_set()
 
 
@@ -1126,21 +1276,20 @@ def redact():
                 reda_open.grab_release()
                 reda_open.destroy()
 
-            def colorgo1r():
-                color = "Жёлтый"
+            def colorgo1r(color = str):
                 lox = text1.selection()
                 loz = int(str(text1.selection())[2:-3]) - 1
                 text1.delete(lox)
                 mar = marc_car[loz]
                 mod = model_car[loz]
                 year = year_of_release[loz]
-                print(color)
                 color_car[loz] = color
                 price = price_car[loz]
                 fari = fari_car[loz]
                 door = door_car[loz]
+                power = power_car[loz]
 
-                fj = [(mar, mod, year, color, price, fari, door)]
+                fj = [(mar, mod, year, color, price, fari, door, power)]
 
                 for component in fj:
                     text1.insert('', loz, lox, values=component)
@@ -1151,7 +1300,8 @@ def redact():
                 color_car_save = ' ; '.join(color_car) + '&'
                 price_car_save = ' ; '.join(price_car) + '&'
                 fari_car_save = ' ; '.join(fari_car) + "&"
-                door_car_save = ' ; '.join(door_car)
+                door_car_save = ' ; '.join(door_car) + "&"
+                power_car_save = ' ; '.join(power_car)
 
                 carina.writelines(marc_car_save)
                 carina.writelines(model_car_save)
@@ -1160,378 +1310,11 @@ def redact():
                 carina.writelines(price_car_save)
                 carina.writelines(fari_car_save)
                 carina.writelines(door_car_save)
+                carina.writelines(power_car_save)
                 carina.close()
                 dismiss(reda_open)
 
-            def colorgo2r():
-                color = "Красный"
-                lox = text1.selection()
-                loz = int(str(text1.selection())[2:-3]) - 1
-                text1.delete(lox)
-                mar = marc_car[loz]
-                mod = model_car[loz]
-                year = year_of_release[loz]
-                print(color)
-                color_car[loz] = color
-                price = price_car[loz]
-                fari = fari_car[loz]
-                door = door_car[loz]
 
-                fj = [(mar, mod, year, color, price, fari, door)]
-
-                for component in fj:
-                    text1.insert('', loz, lox, values=component)
-                carina = open('carina.txt', 'w')
-                marc_car_save = ' ; '.join(marc_car) + '&'
-                model_car_save = ' ; '.join(model_car) + '&'
-                year_of_release_save = ' ; '.join(year_of_release) + '&'
-                color_car_save = ' ; '.join(color_car) + '&'
-                price_car_save = ' ; '.join(price_car) + '&'
-                fari_car_save = ' ; '.join(fari_car) + "&"
-                door_car_save = ' ; '.join(door_car)
-
-                carina.writelines(marc_car_save)
-                carina.writelines(model_car_save)
-                carina.writelines(year_of_release_save)
-                carina.writelines(color_car_save)
-                carina.writelines(price_car_save)
-                carina.writelines(fari_car_save)
-                carina.writelines(door_car_save)
-                carina.close()
-                dismiss(reda_open)
-
-            def colorgo3r():
-                color = "Синий"
-                lox = text1.selection()
-                loz = int(str(text1.selection())[2:-3]) - 1
-                text1.delete(lox)
-                mar = marc_car[loz]
-                mod = model_car[loz]
-                year = year_of_release[loz]
-                print(color)
-                color_car[loz] = color
-                price = price_car[loz]
-                fari = fari_car[loz]
-                door = door_car[loz]
-
-                fj = [(mar, mod, year, color, price, fari, door)]
-
-                for component in fj:
-                    text1.insert('', loz, lox, values=component)
-                carina = open('carina.txt', 'w')
-                marc_car_save = ' ; '.join(marc_car) + '&'
-                model_car_save = ' ; '.join(model_car) + '&'
-                year_of_release_save = ' ; '.join(year_of_release) + '&'
-                color_car_save = ' ; '.join(color_car) + '&'
-                price_car_save = ' ; '.join(price_car) + '&'
-                fari_car_save = ' ; '.join(fari_car) + "&"
-                door_car_save = ' ; '.join(door_car)
-
-                carina.writelines(marc_car_save)
-                carina.writelines(model_car_save)
-                carina.writelines(year_of_release_save)
-                carina.writelines(color_car_save)
-                carina.writelines(price_car_save)
-                carina.writelines(fari_car_save)
-                carina.writelines(door_car_save)
-                carina.close()
-                dismiss(reda_open)
-
-            def colorgo4r():
-                color = "Зелёный"
-                lox = text1.selection()
-                loz = int(str(text1.selection())[2:-3]) - 1
-                text1.delete(lox)
-                mar = marc_car[loz]
-                mod = model_car[loz]
-                year = year_of_release[loz]
-                print(color)
-                color_car[loz] = color
-                price = price_car[loz]
-                fari = fari_car[loz]
-                door = door_car[loz]
-
-                fj = [(mar, mod, year, color, price, fari, door)]
-
-                for component in fj:
-                    text1.insert('', loz, lox, values=component)
-                carina = open('carina.txt', 'w')
-                marc_car_save = ' ; '.join(marc_car) + '&'
-                model_car_save = ' ; '.join(model_car) + '&'
-                year_of_release_save = ' ; '.join(year_of_release) + '&'
-                color_car_save = ' ; '.join(color_car) + '&'
-                price_car_save = ' ; '.join(price_car) + '&'
-                fari_car_save = ' ; '.join(fari_car) + "&"
-                door_car_save = ' ; '.join(door_car)
-
-                carina.writeline(marc_car_save)
-                carina.writelines(model_car_save)
-                carina.writelines(year_of_release_save)
-                carina.writelines(color_car_save)
-                carina.writelines(price_car_save)
-                carina.writelines(fari_car_save)
-                carina.writelines(door_car_save)
-                carina.close()
-                dismiss(reda_open)
-
-            def colorgo5r():
-                color = "Белый"
-                lox = text1.selection()
-                loz = int(str(text1.selection())[2:-3]) - 1
-                text1.delete(lox)
-                mar = marc_car[loz]
-                mod = model_car[loz]
-                year = year_of_release[loz]
-                print(color)
-                color_car[loz] = color
-                price = price_car[loz]
-                fari = fari_car[loz]
-                door = door_car[loz]
-
-                fj = [(mar, mod, year, color, price, fari, door)]
-
-                for component in fj:
-                    text1.insert('', loz, lox, values=component)
-                carina = open('carina.txt', 'w')
-                marc_car_save = ' ; '.join(marc_car) + '&'
-                model_car_save = ' ; '.join(model_car) + '&'
-                year_of_release_save = ' ; '.join(year_of_release) + '&'
-                color_car_save = ' ; '.join(color_car) + '&'
-                price_car_save = ' ; '.join(price_car) + '&'
-                fari_car_save = ' ; '.join(fari_car) + "&"
-                door_car_save = ' ; '.join(door_car)
-
-                carina.writelines(marc_car_save)
-                carina.writelines(model_car_save)
-                carina.writelines(year_of_release_save)
-                carina.writelines(color_car_save)
-                carina.writelines(price_car_save)
-                carina.writelines(fari_car_save)
-                carina.writelines(door_car_save)
-                carina.close()
-                dismiss(reda_open)
-
-            def colorgo6r():
-                color = "Чёрный"
-                lox = text1.selection()
-                loz = int(str(text1.selection())[2:-3]) - 1
-                text1.delete(lox)
-                mar = marc_car[loz]
-                mod = model_car[loz]
-                year = year_of_release[loz]
-                print(color)
-                color_car[loz] = color
-                price = price_car[loz]
-                fari = fari_car[loz]
-                door = door_car[loz]
-
-                fj = [(mar, mod, year, color, price, fari, door)]
-
-                for component in fj:
-                    text1.insert('', loz, lox, values=component)
-                carina = open('carina.txt', 'w')
-                marc_car_save = ' ; '.join(marc_car) + '&'
-                model_car_save = ' ; '.join(model_car) + '&'
-                year_of_release_save = ' ; '.join(year_of_release) + '&'
-                color_car_save = ' ; '.join(color_car) + '&'
-                price_car_save = ' ; '.join(price_car) + '&'
-                fari_car_save = ' ; '.join(fari_car) + "&"
-                door_car_save = ' ; '.join(door_car)
-
-                carina.writelines(marc_car_save)
-                carina.writelines(model_car_save)
-                carina.writelines(year_of_release_save)
-                carina.writelines(color_car_save)
-                carina.writelines(price_car_save)
-                carina.writelines(fari_car_save)
-                carina.writelines(door_car_save)
-                carina.close()
-                dismiss(reda_open)
-
-            def colorgo7r():
-                color = "Серый"
-                lox = text1.selection()
-                loz = int(str(text1.selection())[2:-3]) - 1
-                text1.delete(lox)
-                mar = marc_car[loz]
-                mod = model_car[loz]
-                year = year_of_release[loz]
-                print(color)
-                color_car[loz] = color
-                price = price_car[loz]
-                fari = fari_car[loz]
-                door = door_car[loz]
-
-                fj = [(mar, mod, year, color, price, fari, door)]
-
-                for component in fj:
-                    text1.insert('', loz, lox, values=component)
-                carina = open('carina.txt', 'w')
-                marc_car_save = ' ; '.join(marc_car) + '&'
-                model_car_save = ' ; '.join(model_car) + '&'
-                year_of_release_save = ' ; '.join(year_of_release) + '&'
-                color_car_save = ' ; '.join(color_car) + '&'
-                price_car_save = ' ; '.join(price_car) + '&'
-                fari_car_save = ' ; '.join(fari_car) + "&"
-                door_car_save = ' ; '.join(door_car)
-
-                carina.writelines(marc_car_save)
-                carina.writelines(model_car_save)
-                carina.writelines(year_of_release_save)
-                carina.writelines(color_car_save)
-                carina.writelines(price_car_save)
-                carina.writelines(fari_car_save)
-                carina.writelines(door_car_save)
-                carina.close()
-                dismiss(reda_open)
-
-            def colorgo8r():
-                color = "Серебряный"
-                lox = text1.selection()
-                loz = int(str(text1.selection())[2:-3]) - 1
-                text1.delete(lox)
-                mar = marc_car[loz]
-                mod = model_car[loz]
-                year = year_of_release[loz]
-                print(color)
-                color_car[loz] = color
-                price = price_car[loz]
-                fari = fari_car[loz]
-                door = door_car[loz]
-
-                fj = [(mar, mod, year, color, price, fari, door)]
-
-                for component in fj:
-                    text1.insert('', loz, lox, values=component)
-                carina = open('carina.txt', 'w')
-                marc_car_save = ' ; '.join(marc_car) + '&'
-                model_car_save = ' ; '.join(model_car) + '&'
-                year_of_release_save = ' ; '.join(year_of_release) + '&'
-                color_car_save = ' ; '.join(color_car) + '&'
-                price_car_save = ' ; '.join(price_car) + '&'
-                fari_car_save = ' ; '.join(fari_car) + "&"
-                door_car_save = ' ; '.join(door_car)
-
-                carina.writelines(marc_car_save)
-                carina.writelines(model_car_save)
-                carina.writelines(year_of_release_save)
-                carina.writelines(color_car_save)
-                carina.writelines(price_car_save)
-                carina.writelines(fari_car_save)
-                carina.writelines(door_car_save)
-                carina.close()
-                dismiss(reda_open)
-
-            def colorgo9r():
-                color = "Коричневый"
-                lox = text1.selection()
-                loz = int(str(text1.selection())[2:-3]) - 1
-                text1.delete(lox)
-                mar = marc_car[loz]
-                mod = model_car[loz]
-                year = year_of_release[loz]
-                print(color)
-                color_car[loz] = color
-                price = price_car[loz]
-                fari = fari_car[loz]
-                door = door_car[loz]
-
-                fj = [(mar, mod, year, color, price, fari, door)]
-
-                for component in fj:
-                    text1.insert('', loz, lox, values=component)
-                carina = open('carina.txt', 'w')
-                marc_car_save = ' ; '.join(marc_car) + '&'
-                model_car_save = ' ; '.join(model_car) + '&'
-                year_of_release_save = ' ; '.join(year_of_release) + '&'
-                color_car_save = ' ; '.join(color_car) + '&'
-                price_car_save = ' ; '.join(price_car) + '&'
-                fari_car_save = ' ; '.join(fari_car) + "&"
-                door_car_save = ' ; '.join(door_car)
-
-                carina.writelines(marc_car_save)
-                carina.writelines(model_car_save)
-                carina.writelines(year_of_release_save)
-                carina.writelines(color_car_save)
-                carina.writelines(price_car_save)
-                carina.writelines(fari_car_save)
-                carina.writelines(door_car_save)
-                carina.close()
-                dismiss(reda_open)
-
-            def colorgo10r():
-                color = "Оранжевый"
-                lox = text1.selection()
-                loz = int(str(text1.selection())[2:-3]) - 1
-                text1.delete(lox)
-                mar = marc_car[loz]
-                mod = model_car[loz]
-                year = year_of_release[loz]
-                print(color)
-                color_car[loz] = color
-                price = price_car[loz]
-                fari = fari_car[loz]
-                door = door_car[loz]
-
-                fj = [(mar, mod, year, color, price, fari, door)]
-
-                for component in fj:
-                    text1.insert('', loz, lox, values=component)
-                carina = open('carina.txt', 'w')
-                marc_car_save = ' ; '.join(marc_car) + '&'
-                model_car_save = ' ; '.join(model_car) + '&'
-                year_of_release_save = ' ; '.join(year_of_release) + '&'
-                color_car_save = ' ; '.join(color_car) + '&'
-                price_car_save = ' ; '.join(price_car) + '&'
-                fari_car_save = ' ; '.join(fari_car) + "&"
-                door_car_save = ' ; '.join(door_car)
-
-                carina.writelines(marc_car_save)
-                carina.writelines(model_car_save)
-                carina.writelines(year_of_release_save)
-                carina.writelines(color_car_save)
-                carina.writelines(price_car_save)
-                carina.writelines(fari_car_save)
-                carina.writelines(door_car_save)
-                carina.close()
-                dismiss(reda_open)
-
-            def colorgo11r():
-                color = "Фиолетовый"
-                lox = text1.selection()
-                loz = int(str(text1.selection())[2:-3]) - 1
-                text1.delete(lox)
-                mar = marc_car[loz]
-                mod = model_car[loz]
-                year = year_of_release[loz]
-                print(color)
-                color_car[loz] = color
-                price = price_car[loz]
-                fari = fari_car[loz]
-                door = door_car[loz]
-
-                fj = [(mar, mod, year, color, price, fari, door)]
-
-                for component in fj:
-                    text1.insert('', loz, lox, values=component)
-                carina = open('carina.txt', 'w')
-                marc_car_save = ' ; '.join(marc_car) + '&'
-                model_car_save = ' ; '.join(model_car) + '&'
-                year_of_release_save = ' ; '.join(year_of_release) + '&'
-                color_car_save = ' ; '.join(color_car) + '&'
-                price_car_save = ' ; '.join(price_car) + '&'
-                fari_car_save = ' ; '.join(fari_car) + "&"
-                door_car_save = ' ; '.join(door_car)
-
-                carina.writelines(marc_car_save)
-                carina.writelines(model_car_save)
-                carina.writelines(year_of_release_save)
-                carina.writelines(color_car_save)
-                carina.writelines(price_car_save)
-                carina.writelines(fari_car_save)
-                carina.writelines(door_car_save)
-                carina.close()
-                dismiss(reda_open)
 
             reda_open = Toplevel()
             reda_open.title("Цвет")
@@ -1543,18 +1326,18 @@ def redact():
             f4r = Frame(reda_open)
             f5r = Frame(reda_open)
 
-            b10r = Button(f1r, width=9, height=4, bg='yellow', text='Желтый', command=colorgo1r)
-            b11r = Button(f1r, width=9, height=4, bg='red', text='Красный', command=colorgo2r)
-            b12r = Button(f1r, width=9, height=4, bg='blue', text='Синий', command=colorgo3r)
-            b13r = Button(f1r, width=9, height=4, bg='green', text='Зеленый', command=colorgo4r)
-            b14r = Button(f2r, width=9, height=4, bg='white', text='Белый', command=colorgo5r)
+            b10r = Button(f1r, width=9, height=4, bg='yellow', text='Желтый', command=lambda: colorgo1r('Желтый'))
+            b11r = Button(f1r, width=9, height=4, bg='red', text='Красный', command=lambda: colorgo1r('Красный'))
+            b12r = Button(f1r, width=9, height=4, bg='blue', text='Синий', command=lambda: colorgo1r('Синий'))
+            b13r = Button(f1r, width=9, height=4, bg='green', text='Зеленый', command=lambda: colorgo1r('Зеленый'))
+            b14r = Button(f2r, width=9, height=4, bg='white', text='Белый', command=lambda: colorgo1r('Белый'))
             b15r = Button(f2r, width=9, height=4, bg='black', text='Черный', foreground='white',
-                          command=colorgo6r)
-            b16r = Button(f2r, width=9, height=4, bg='grey', text='Серый', command=colorgo7r)
-            b17r = Button(f2r, width=9, height=4, bg='silver', text='Серебряный', command=colorgo8r)
-            b18r = Button(f3r, width=9, height=4, bg='brown', text='Коричневый', command=colorgo9r)
-            b19r = Button(f3r, width=9, height=4, bg='orange', text='Оранжевый', command=colorgo10r)
-            b20r = Button(f3r, width=9, height=4, bg='violet', text='Фиолетовый', command=colorgo11r)
+                          command=lambda: colorgo1r('Черный'))
+            b16r = Button(f2r, width=9, height=4, bg='grey', text='Серый', command=lambda: colorgo1r('Серый'))
+            b17r = Button(f2r, width=9, height=4, bg='silver', text='Серебряный', command=lambda: colorgo1r('Серебряный'))
+            b18r = Button(f3r, width=9, height=4, bg='brown', text='Коричневый', command=lambda: colorgo1r('Коричневый'))
+            b19r = Button(f3r, width=9, height=4, bg='orange', text='Оранжевый', command=lambda: colorgo1r('Оранжевый'))
+            b20r = Button(f3r, width=9, height=4, bg='violet', text='Фиолетовый', command=lambda: colorgo1r('Фиолетовый'))
             # b21r = Button(f3r, width=9, height=4, bg='', text='')
             # b22r = Button(f4r, width=9, height=4, bg='', text='')
             # b23r = Button(f4r, width=9, height=4, bg='', text='')
@@ -1603,6 +1386,8 @@ def redact():
                 try:
                     price = inputingr.get()
                     a = int(price)
+                    if a < 1:
+                        raise ValueError
                     lox = text1.selection()
                     loz = int(str(text1.selection())[2:-3]) - 1
                     text1.delete(lox)
@@ -1613,8 +1398,9 @@ def redact():
                     price_car[loz] = price
                     fari = fari_car[loz]
                     door = door_car[loz]
+                    power = power_car[loz]
 
-                    fj = [(mar, mod, year, color, price, fari, door)]
+                    fj = [(mar, mod, year, color, price, fari, door, power)]
 
                     for component in fj:
                         text1.insert('', loz, lox, values=component)
@@ -1625,7 +1411,8 @@ def redact():
                     color_car_save = ' ; '.join(color_car) + '&'
                     price_car_save = ' ; '.join(price_car) + '&'
                     fari_car_save = ' ; '.join(fari_car) + "&"
-                    door_car_save = ' ; '.join(door_car)
+                    door_car_save = ' ; '.join(door_car) + "&"
+                    power_car_save = ' ; '.join(power_car)
 
                     carina.writelines(marc_car_save)
                     carina.writelines(model_car_save)
@@ -1634,6 +1421,7 @@ def redact():
                     carina.writelines(price_car_save)
                     carina.writelines(fari_car_save)
                     carina.writelines(door_car_save)
+                    carina.writelines(power_car_save)
                     carina.close()
                     dismiss(redb_open)
                 except:
@@ -1645,6 +1433,69 @@ def redact():
             #redb_open.protocol("WM_DELETE_WINDOW", lambda: dismis(redb_open))
             inputingr = Entry(redb_open, width=40)
             label_red = Label(redb_open, text="Введите Цену")
+            button_r = Button(redb_open, width=14, height=2, text='Далее', command=rb)
+            label_red.pack()
+            inputingr.pack()
+            button_r.pack()
+            redb_open.grab_set()
+            dismiss(mainredact)
+
+        def red_i():
+            def dismiss(redb_open):
+                redb_open.grab_release()
+                redb_open.destroy()
+
+            def rb():
+                try:
+                    power = inputingr.get()
+                    a = int(power)
+                    if a < 1 or a > 2000:
+                        raise ValueError
+                    lox = text1.selection()
+                    loz = int(str(text1.selection())[2:-3]) - 1
+                    text1.delete(lox)
+                    mar = marc_car[loz]
+                    mod = model_car[loz]
+                    year = year_of_release[loz]
+                    color = color_car[loz]
+                    price = price_car[loz]
+                    fari = fari_car[loz]
+                    door = door_car[loz]
+                    power_car[loz] = power
+
+                    fj = [(mar, mod, year, color, price, fari, door, power)]
+
+                    for component in fj:
+                        text1.insert('', loz, lox, values=component)
+                    carina = open('carina.txt', 'w')
+                    marc_car_save = ' ; '.join(marc_car) + '&'
+                    model_car_save = ' ; '.join(model_car) + '&'
+                    year_of_release_save = ' ; '.join(year_of_release) + '&'
+                    color_car_save = ' ; '.join(color_car) + '&'
+                    price_car_save = ' ; '.join(price_car) + '&'
+                    fari_car_save = ' ; '.join(fari_car) + "&"
+                    door_car_save = ' ; '.join(door_car) + "&"
+                    power_car_save = ' ; '.join(power_car)
+
+                    carina.writelines(marc_car_save)
+                    carina.writelines(model_car_save)
+                    carina.writelines(year_of_release_save)
+                    carina.writelines(color_car_save)
+                    carina.writelines(price_car_save)
+                    carina.writelines(fari_car_save)
+                    carina.writelines(door_car_save)
+                    carina.writelines(power_car_save)
+                    carina.close()
+                    dismiss(redb_open)
+                except:
+                    label_red["foreground"] = "#B71C1C"
+
+            redb_open = Toplevel()
+            redb_open.title("Мощность")
+            redb_open.geometry("250x100")
+            #redb_open.protocol("WM_DELETE_WINDOW", lambda: dismis(redb_open))
+            inputingr = Entry(redb_open, width=40)
+            label_red = Label(redb_open, text="Введите Мощность")
             button_r = Button(redb_open, width=14, height=2, text='Далее', command=rb)
             label_red.pack()
             inputingr.pack()
@@ -1669,8 +1520,9 @@ def redact():
                 price = price_car[loz]
                 fari_car[loz] = fari
                 door = door_car[loz]
+                power = power_car[loz]
 
-                fj = [(mar, mod, year, color, price, fari, door)]
+                fj = [(mar, mod, year, color, price, fari, door, power)]
 
                 for component in fj:
                     text1.insert('', loz, lox, values=component)
@@ -1681,7 +1533,8 @@ def redact():
                 color_car_save = ' ; '.join(color_car) + '&'
                 price_car_save = ' ; '.join(price_car) + '&'
                 fari_car_save = ' ; '.join(fari_car) + "&"
-                door_car_save = ' ; '.join(door_car)
+                door_car_save = ' ; '.join(door_car) + "&"
+                power_car_save = ' ; '.join(power_car)
 
                 carina.writelines(marc_car_save)
                 carina.writelines(model_car_save)
@@ -1690,6 +1543,7 @@ def redact():
                 carina.writelines(price_car_save)
                 carina.writelines(fari_car_save)
                 carina.writelines(door_car_save)
+                carina.writelines(power_car_save)
                 carina.close()
                 dismiss(far_and_door_r)
 
@@ -1705,8 +1559,9 @@ def redact():
                 price = price_car[loz]
                 fari_car[loz] = fari
                 door = door_car[loz]
+                power = power_car[loz]
 
-                fj = [(mar, mod, year, color, price, fari, door)]
+                fj = [(mar, mod, year, color, price, fari, door, power)]
 
                 for component in fj:
                     text1.insert('', loz, lox, values=component)
@@ -1717,7 +1572,8 @@ def redact():
                 color_car_save = ' ; '.join(color_car) + '&'
                 price_car_save = ' ; '.join(price_car) + '&'
                 fari_car_save = ' ; '.join(fari_car) + "&"
-                door_car_save = ' ; '.join(door_car)
+                door_car_save = ' ; '.join(door_car) + "&"
+                power_car_save = ' ; '.join(power_car)
 
                 carina.writelines(marc_car_save)
                 carina.writelines(model_car_save)
@@ -1726,6 +1582,7 @@ def redact():
                 carina.writelines(price_car_save)
                 carina.writelines(fari_car_save)
                 carina.writelines(door_car_save)
+                carina.writelines(power_car_save)
                 carina.close()
                 dismiss(far_and_door_r)
 
@@ -1759,8 +1616,9 @@ def redact():
                 price = price_car[loz]
                 fari = fari_car[loz]
                 door_car[loz] = door
+                power = power_car[loz]
 
-                fj = [(mar, mod, year, color, price, fari, door)]
+                fj = [(mar, mod, year, color, price, fari, door, power)]
 
                 for component in fj:
                     text1.insert('', loz, lox, values=component)
@@ -1771,7 +1629,8 @@ def redact():
                 color_car_save = ' ; '.join(color_car) + '&'
                 price_car_save = ' ; '.join(price_car) + '&'
                 fari_car_save = ' ; '.join(fari_car) + "&"
-                door_car_save = ' ; '.join(door_car)
+                door_car_save = ' ; '.join(door_car) + "&"
+                power_car_save = ' ; '.join(power_car)
 
                 carina.writelines(marc_car_save)
                 carina.writelines(model_car_save)
@@ -1780,6 +1639,7 @@ def redact():
                 carina.writelines(price_car_save)
                 carina.writelines(fari_car_save)
                 carina.writelines(door_car_save)
+                carina.writelines(power_car_save)
                 carina.close()
                 dismiss(far_and_door_r2)
 
@@ -1795,8 +1655,9 @@ def redact():
                 price = price_car[loz]
                 fari = fari_car[loz]
                 door_car[loz] = door
+                power_car[loz] = power
 
-                fj = [(mar, mod, year, color, price, fari, door)]
+                fj = [(mar, mod, year, color, price, fari, door, power)]
                 carina = open('carina.txt', 'w')
                 for component in fj:
                     text1.insert('', loz, lox, values=component)
@@ -1807,7 +1668,8 @@ def redact():
                 color_car_save = ' ; '.join(color_car) + '&'
                 price_car_save = ' ; '.join(price_car) + '&'
                 fari_car_save = ' ; '.join(fari_car) + "&"
-                door_car_save = ' ; '.join(door_car)
+                door_car_save = ' ; '.join(door_car) + "&"
+                power_car_save = ' ; '.join(power_car)
 
                 carina.writelines(marc_car_save)
                 carina.writelines(model_car_save)
@@ -1816,6 +1678,7 @@ def redact():
                 carina.writelines(price_car_save)
                 carina.writelines(fari_car_save)
                 carina.writelines(door_car_save)
+                carina.writelines(power_car_save)
                 carina.close()
                 dismiss(far_and_door_r2)
 
@@ -1834,26 +1697,28 @@ def redact():
 
         mainredact = Toplevel()
         mainredact.title("Изменение")
-        mainredact.geometry("300x150")
+        mainredact.geometry("380x150")
         mainredact.protocol("WM_DELETE_WINDOW", lambda: dismiss(mainredact))
         delbat = Button(mainredact, text="Отмена", command=lambda: dismiss(mainredact))
         bat_a = Button(mainredact, text="Цвет", command=red_a)
         bat_b = Button(mainredact, text="Цена", command=red_b)
         bat_c = Button(mainredact, text="Сост.фар", command=red_c)
         bat_d = Button(mainredact, text="Сос.дверей", command=red_d)
+        bat_i = Button(mainredact, text="Мощность", command=red_i)
         labelred = Label(mainredact, text="Выберете, что изменить")
         labelred.pack(pady=10)
         bat_a.pack(side=LEFT, padx=10)
         bat_b.pack(side=LEFT, padx=10)
         bat_c.pack(side=LEFT, padx=10)
         bat_d.pack(side=LEFT, padx=10)
+        bat_i.pack(side=LEFT, padx=10)
         mainredact.grab_set()
 
 
 main = Tk()
 main.title("car")
-main.geometry("850x400")
-columns = ("Марка", "Модель", "Год", "Цвет", "Цена", "Фары", "Двери")
+main.geometry("1000x400")
+columns = ("Марка", "Модель", "Год", "Цвет", "Цена", "Фары", "Двери", "Мощность")
 
 label = Label(width=30, height=2, text="")
 label.pack()
@@ -1877,6 +1742,7 @@ text1.heading("Цвет", text="Цвет")
 text1.heading("Цена", text="Цена")
 text1.heading("Фары", text="Фары")
 text1.heading("Двери", text="Двери")
+text1.heading("Мощность", text="Мощность")
 
 text1.column("#1", width=120)
 text1.column("#2", width=120)
@@ -1885,6 +1751,7 @@ text1.column("#4", width=120)
 text1.column("#5", width=120)
 text1.column("#6", width=120)
 text1.column("#7", width=120)
+text1.column("#8", width=120)
 
 if file[0] != "":
     you = 0
